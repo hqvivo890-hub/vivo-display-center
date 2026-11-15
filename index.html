@@ -194,29 +194,8 @@ h1{margin:0 0 6px;font-size:28px;line-height:1.15;font-weight:650;letter-spacing
   transition: stroke-dashoffset 0.07s linear;
 }
 
-/* prev / next arrows — size relative to container */
-.vb-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%) translateY(-16px);
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  z-index: 30;
-  font-size: 18px; line-height: 1;
-  font-family: inherit; border: none;
-  color: rgba(255,255,255,0.80);
-  background: rgba(0,0,0,0.28);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-  transition: background 0.18s, color 0.18s;
-}
-.vb-nav:hover  { background: rgba(0,0,0,0.50); color: #fff; }
-.vb-nav:active { opacity: 0.75; }
-.vb-nav.l { left: 8px; }
-.vb-nav.r { right: 8px; }
+/* arrows hidden — swipe only on mobile */
+.vb-nav { display: none; }
 
 </style>
 </head>
@@ -266,9 +245,6 @@ h1{margin:0 0 6px;font-size:28px;line-height:1.15;font-weight:650;letter-spacing
     </a>
 
   </div>
-
-  <button class="vb-nav l" id="vbPrev" aria-label="Previous">‹</button>
-  <button class="vb-nav r" id="vbNext" aria-label="Next">›</button>
 
   <div class="vb-bar">
     <div class="vb-pips" id="vbPips">
@@ -352,10 +328,7 @@ h1{margin:0 0 6px;font-size:28px;line-height:1.15;font-weight:650;letter-spacing
   pips.forEach(function(p){
     p.addEventListener('click',function(){ go(parseInt(p.dataset.i),true); });
   });
-  document.getElementById('vbPrev')
-    .addEventListener('click',function(e){ e.preventDefault(); go(cur-1,true); });
-  document.getElementById('vbNext')
-    .addEventListener('click',function(e){ e.preventDefault(); go(cur+1,true); });
+
 
   root.addEventListener('mouseenter',function(){ paused=true; });
   root.addEventListener('mouseleave',function(){ paused=false; t0=null; });
