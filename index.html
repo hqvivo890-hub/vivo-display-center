@@ -39,12 +39,23 @@ h1{margin:0 0 6px;font-size:28px;line-height:1.15;font-weight:650;letter-spacing
 .t{display:block;font-size:16.5px;font-weight:600}
 .d{display:block;font-size:13.5px;color:var(--muted)}
 .chev{margin-left:auto;flex:none;width:18px;height:18px;color:var(--muted);opacity:.7}
-.info{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:4px 18px}
-.info div{padding:14px 0}
-.info div+div{border-top:1px solid var(--line)}
-.k{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);font-weight:650;margin-bottom:4px}
-.v{font-size:15.5px}
-.v small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.info{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:6px 20px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.irow{display:flex;align-items:flex-start;gap:14px;padding:18px 0}
+.irow+.irow{border-top:1px solid var(--line)}
+.ic{flex:none;width:48px;height:48px;border-radius:14px;display:grid;place-items:center}
+.ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic-clock{background:#fff3e6;color:#f26a21}
+.ic-pin{background:#e8efff;color:#4a63e7}
+.itx{flex:1;min-width:0}
+.k{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.hv{display:block;font-size:18px;font-weight:700;line-height:1.3;letter-spacing:-.2px;overflow-wrap:anywhere}
+.hs{display:block;font-size:14.5px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
+.hc{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px;font-weight:600;color:#e5254b}
+.hc i{flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ic-clock{background:rgba(242,106,33,.16);color:#ff9a5c}:root:not([data-theme="light"]) .ic-pin{background:rgba(123,143,255,.16);color:#a3b2ff}:root:not([data-theme="light"]) .hc{color:#ff6b86}}
+:root[data-theme="dark"] .ic-clock{background:rgba(242,106,33,.16);color:#ff9a5c}
+:root[data-theme="dark"] .ic-pin{background:rgba(123,143,255,.16);color:#a3b2ff}
+:root[data-theme="dark"] .hc{color:#ff6b86}
 .shade{position:fixed;inset:0;background:rgba(5,8,20,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20}
 .sheet{width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px}
@@ -276,8 +287,14 @@ h1{margin:0 0 6px;font-size:28px;line-height:1.15;font-weight:650;letter-spacing
 <li id="liCall"><button class="row" id="callBtn" type="button" aria-haspopup="dialog"><span class="tile"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#415FFF"/><g transform="translate(5 5) scale(.58)"><path fill="#fff" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></g></svg></span><span class="txt"><span class="t">Call us</span><span class="d">Phone or WhatsApp</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></li>
 </ul>
 <section class="info">
-<div id="boxHours"><span class="k">Opening hours</span><span class="v"><span id="hours">Open daily 11.00 am – 08.00 pm</span><small id="closed">Tuesday closed</small></span></div>
-<div id="boxAddr"><span class="k">Visit us</span><span class="v" id="address">Bashundhara City Shopping Complex, Gate No. 1, beside Toggi Fun World gate, Vivo Display Center, Kawran Bazar</span></div>
+<div class="irow" id="boxHours">
+<span class="ic ic-clock"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+<span class="itx"><span class="k">Opening Hours</span><span class="hv" id="hours">11:00 am – 8:00 pm</span><span class="hs" id="days">Wednesday – Monday</span><span class="hc" id="closedWrap"><i></i><span id="closedTxt">Closed on Tuesdays</span></span></span>
+</div>
+<div class="irow" id="boxAddr">
+<span class="ic ic-pin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+<span class="itx"><span class="k">Visit Us</span><span class="hv" id="addrMain">Bashundhara City Shopping Complex</span><span class="hs" id="addrSub">Gate No. 1 · Beside Toggi Fun World · Kawran Bazar</span></span>
+</div>
 </section>
 </main>
 <div id="toast" role="status" hidden>No link available</div>
@@ -393,6 +410,25 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')s.hidden=tru
     if(e.key==='Enter'&&a&&a.hasAttribute&&a.hasAttribute('data-nolink')){e.preventDefault();toast('No link available')}
   });
 
+  function lc(s){return s.replace(/\b(AM|PM)\b/g,function(m){return m.toLowerCase()})}
+  var DN=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  function cap(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()}
+  function schedule(c){
+    c=(c||'').trim();var m;
+    if(!c)return{days:'',note:''};
+    if(/^open 7 days$/i.test(c))return{days:'Every day',note:''};
+    if((m=c.match(/^([a-z]+day) closed$/i))){var i=DN.indexOf(cap(m[1]));if(i>=0)return{days:DN[(i+1)%7]+' – '+DN[(i+6)%7],note:'Closed on '+DN[i]+'s'}}
+    if((m=c.match(/^([a-z]+day) opens after (.+)$/i)))return{days:'Every day',note:cap(m[1])+' opens after '+lc(m[2].toUpperCase())};
+    return{days:'',note:c};
+  }
+  function addr(a){
+    a=(a||'').replace(/\s+/g,' ').trim();
+    if(!a)return{main:'Not available',sub:''};
+    var p=a.split(/\s*,\s*/).filter(Boolean);
+    if(p.length>1&&/^[A-Z0-9]{4}\+[A-Z0-9]{2,}$/i.test(p[0]))p.shift();
+    var main=p.shift()||a;
+    return{main:main,sub:p.join(' · ')};
+  }
   function apply(shop){
     shop=shop||{};
     if(shop.name){$('shopName').textContent=shop.name;document.title='vivo '+shop.name}
@@ -412,9 +448,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')s.hidden=tru
       $('phoneTxt').textContent='No number available';
       $('lnkTel').hidden=true;$('lnkWa').hidden=true;
     }
-    $('hours').textContent=shop.hours||'Not available';
-    $('closed').textContent=shop.closed||'';$('closed').hidden=!shop.closed;
-    $('address').textContent=shop.address||'Not available';
+    $('hours').textContent=shop.hours?lc(shop.hours):'Not available';
+    var sc=schedule(shop.closed);
+    $('days').textContent=sc.days;$('days').hidden=!sc.days;
+    $('closedTxt').textContent=sc.note;$('closedWrap').hidden=!sc.note;
+    var ad=addr(shop.address);
+    $('addrMain').textContent=ad.main;$('addrSub').textContent=ad.sub;$('addrSub').hidden=!ad.sub;
   }
 
   function ready(){document.documentElement.className=document.documentElement.className.replace(' shoploading','')}
