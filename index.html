@@ -12,7 +12,7 @@
 <!-- End Google Tag Manager -->
 <meta charset="utf-8">
 <script>if(/[?&]shop=/.test(location.search)){document.documentElement.className+=" shoploading";setTimeout(function(){document.documentElement.className=document.documentElement.className.replace(" shoploading","")},4000)}</script>
-<style>.shoploading main{visibility:hidden}</style>
+<style>.shoploading main{visibility:hidden}[hidden]{display:none!important}#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1d1d1f;color:#fff;padding:10px 18px;border-radius:999px;font:500 14px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;z-index:60;box-shadow:0 4px 16px rgba(0,0,0,.28);white-space:nowrap}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>vivo Display Center (BCT)</title>
 <meta name="theme-color" content="#415FFF">
@@ -280,6 +280,7 @@ h1{margin:0 0 6px;font-size:28px;line-height:1.15;font-weight:650;letter-spacing
 <div id="boxAddr"><span class="k">Visit us</span><span class="v" id="address">Bashundhara City Shopping Complex, Gate No. 1, beside Toggi Fun World gate, Vivo Display Center, Kawran Bazar</span></div>
 </section>
 </main>
+<div id="toast" role="status" hidden>No link available</div>
 <div class="shade" id="sheet" data-close hidden>
 <div class="sheet" role="dialog" aria-modal="true" aria-label="Contact us">
 <div class="grab"></div>
@@ -365,7 +366,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')s.hidden=tru
 </script>
 
 <script>
-/* ── Per-shop content: index.html?shop=S001 reads shops.json ── */
+/* ── Per-shop content: index.html?shop=CODE reads shops.json ── */
 (function(){
   'use strict';
   var $=function(id){return document.getElementById(id)};
@@ -374,53 +375,59 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')s.hidden=tru
   window.dataLayer=window.dataLayer||[];
 
   function url(u){u=(u||'').trim();return /^https?:\/\//i.test(u)?u:''}
-  function show(el,on){if(el)el.hidden=!on}
   function digits(p){var d=(p||'').replace(/\D/g,'');if(d.indexOf('880')===0)return d;if(d.charAt(0)==='0')d=d.slice(1);return d?'880'+d:''}
 
+  /* a button without a link stays visible; pressing it shows "No link available" */
+  var tmr;
+  function toast(msg){var t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(tmr);tmr=setTimeout(function(){t.hidden=true},2200)}
+  function link(a,u){
+    if(u){a.href=u;a.target='_blank';a.rel='noopener';a.removeAttribute('data-nolink');a.removeAttribute('role');a.removeAttribute('tabindex')}
+    else{a.removeAttribute('href');a.removeAttribute('target');a.setAttribute('data-nolink','1');a.setAttribute('role','link');a.setAttribute('tabindex','0')}
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('[data-nolink]'):null;
+    if(a){e.preventDefault();toast('No link available')}
+  });
+  document.addEventListener('keydown',function(e){
+    var a=document.activeElement;
+    if(e.key==='Enter'&&a&&a.hasAttribute&&a.hasAttribute('data-nolink')){e.preventDefault();toast('No link available')}
+  });
+
   function apply(shop){
-    if(!shop)return;
-    if(shop.name){
-      $('shopName').textContent=shop.name;
-      document.title='vivo '+shop.name;
-    }
-    var m=url(shop.maps);   show($('liMaps'),!!m); if(m)$('lnkMaps').href=m;
-    var f=url(shop.facebook);show($('liFb'),!!f);  if(f)$('lnkFb').href=f;
-    var t=url(shop.tiktok);  show($('liTt'),!!t);  if(t){$('lnkTt').href=t;var h=t.match(/@[^\/?#]+/);$('ttHandle').textContent=h?h[0]:'TikTok'}
-    var wa=digits(shop.phone), hasPhone=!!wa;
-    show($('liCall'),hasPhone);
-    if(hasPhone){
+    shop=shop||{};
+    if(shop.name){$('shopName').textContent=shop.name;document.title='vivo '+shop.name}
+    link($('lnkMaps'),url(shop.maps));
+    link($('lnkFb'),url(shop.facebook));
+    var t=url(shop.tiktok);
+    link($('lnkTt'),t);
+    var h=t&&t.match(/@[^\/?#]+/);
+    $('ttHandle').textContent=h?h[0]:'Follow us on TikTok';
+    var wa=digits(shop.phone);
+    if(wa){
       $('phoneTxt').textContent=shop.phone;
       $('lnkTel').href='tel:+'+wa;
-      $('lnkWa').href='https://wa.me/'+wa+'?text='+encodeURIComponent('Hello vivo '+(shop.name||'Display Center'));
+      $('lnkWa').href='https://wa.me/'+wa+'?text='+encodeURIComponent('Hello '+document.title);
+      $('lnkTel').hidden=false;$('lnkWa').hidden=false;
+    }else{
+      $('phoneTxt').textContent='No number available';
+      $('lnkTel').hidden=true;$('lnkWa').hidden=true;
     }
-    show($('boxHours'),!!shop.hours);
-    if(shop.hours){$('hours').textContent=shop.hours;$('closed').textContent=shop.closed||'';$('closed').hidden=!shop.closed}
-    show($('boxAddr'),!!shop.address);
-    if(shop.address)$('address').textContent=shop.address;
+    $('hours').textContent=shop.hours||'Not available';
+    $('closed').textContent=shop.closed||'';$('closed').hidden=!shop.closed;
+    $('address').textContent=shop.address||'Not available';
   }
 
+  function ready(){document.documentElement.className=document.documentElement.className.replace(' shoploading','')}
   function track(shop,found){
     var s=shop||{};
-    window.dataLayer.push({
-      event:'shop_view',
-      shop_id:id,
-      shop_name:s.name||'',
-      shop_area:s.area||'',
-      shop_found:found
-    });
+    window.dataLayer.push({event:'shop_view',shop_id:id,shop_name:s.name||'',shop_area:s.area||'',shop_found:found});
   }
+  function unknown(){if(q.has('shop'))apply({name:'Display Center'})}
 
   fetch('shops.json',{cache:'no-cache'})
     .then(function(r){if(!r.ok)throw 0;return r.json()})
     .then(function(all){var shop=all[id];if(shop)apply(shop);else unknown();track(shop,!!shop);ready()})
-    .catch(function(){if(q.has('shop'))unknown();track(null,false);ready()});
-
-  function unknown(){
-    if(!q.has('shop'))return;
-    ['liMaps','liFb','liTt','liCall','boxHours','boxAddr'].forEach(function(i){show($(i),false)});
-    $('shopName').textContent='Display Center';
-  }
-  function ready(){document.documentElement.className=document.documentElement.className.replace(' shoploading','')}
+    .catch(function(){unknown();track(null,false);ready()});
 })();
 </script>
 </body>
